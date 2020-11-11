@@ -141,6 +141,43 @@ pipeline {
                         }
                     }
                 }
+                stage('PBM tests mongodb 4.4') {
+                    agent {
+                        label 'docker-32gb'
+                    }
+                    steps {
+                        script {
+                            testsReportMap['mongodb 4.4'] = 'failed'
+                        }
+                        withCredentials([file(credentialsId: 'PBM-AWS-S3', variable: 'PBM_AWS_S3_YML'), file(credentialsId: 'PBM-GCS-S3', variable: 'PBM_GCS_S3_YML')]) {
+                            sh '''
+                                sudo curl -L "https://github.com/docker/compose/releases/download/1.25.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                                sudo chmod +x /usr/local/bin/docker-compose
+
+                                cp $PBM_AWS_S3_YML ./e2e-tests/docker/conf/aws.yaml
+                                cp $PBM_GCS_S3_YML ./e2e-tests/docker/conf/gcs.yaml
+                                sed -i s:pbme2etest:pbme2etest-42:g ./e2e-tests/docker/conf/aws.yaml
+                                sed -i s:pbme2etest:pbme2etest-42:g ./e2e-tests/docker/conf/gcs.yaml
+
+                                chmod 664 ./e2e-tests/docker/conf/aws.yaml
+                                chmod 664 ./e2e-tests/docker/conf/gcs.yaml
+
+                                docker-compose -f ./e2e-tests/docker/docker-compose.yaml build
+                                openssl rand -base64 756 > ./e2e-tests/docker/keyFile
+                                sudo chown 1001:1001 ./e2e-tests/docker/keyFile
+                                sudo chmod 400 ./e2e-tests/docker/keyFile
+                            '''
+                        }
+                        sh '''
+                            export MONGODB_VERSION=4.4
+                            export PBM_TESTS_NO_BUILD=true
+                            ./e2e-tests/run-all
+                        '''
+                        script {
+                            testsReportMap['mongodb 4.4'] = 'passed'
+                        }
+                    }
+                }
             }
         }
     }

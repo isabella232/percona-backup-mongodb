@@ -4,6 +4,11 @@ services:
     build: 
       dockerfile: ./e2e-tests/Dockerfile
       context: ../..
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-test
     environment:
       - BACKUP_USER=bcp
@@ -24,6 +29,11 @@ services:
       - MONGO_USER=dba
       - BACKUP_USER=bcp
       - MONGO_PASS=test1234
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongod --configsvr --dbpath /data/db --replSet cfg --bind_ip_all --port 27017 --keyFile /opt/keyFile --storageEngine wiredTiger  --wiredTigerCacheSizeGB 1
     volumes:
       - ./scripts/start.sh:/opt/start.sh
@@ -31,12 +41,22 @@ services:
   cfg02:
     image: percona/percona-server-mongodb:${MONGODB_VERSION:-3.6}
     hostname: cfg02
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongod --configsvr --dbpath /data/db --replSet cfg --bind_ip_all --port 27017 --keyFile /opt/keyFile --storageEngine wiredTiger --wiredTigerCacheSizeGB 1
     volumes:
       - ./keyFile:/opt/keyFile
   cfg03:
     image: percona/percona-server-mongodb:${MONGODB_VERSION:-3.6}
     hostname: cfg03
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongod --configsvr --dbpath /data/db --replSet cfg --bind_ip_all --port 27017 --keyFile /opt/keyFile --storageEngine wiredTiger --wiredTigerCacheSizeGB 1
     volumes:
       - ./keyFile:/opt/keyFile
@@ -52,6 +72,11 @@ services:
         - "com.percona.pbm.app=agent"
       dockerfile: ./e2e-tests/docker/pbm-agent/Dockerfile
       context: ../..
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-agent
     cap_add:
       - NET_ADMIN
@@ -71,6 +96,11 @@ services:
         - "com.percona.pbm.app=agent"
       dockerfile: ./e2e-tests/docker/pbm-agent/Dockerfile
       context: ../..
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-agent
     cap_add:
       - NET_ADMIN
@@ -90,6 +120,11 @@ services:
         - "com.percona.pbm.app=agent"
       dockerfile: ./e2e-tests/docker/pbm-agent/Dockerfile
       context: ../..
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-agent
     cap_add:
       - NET_ADMIN
@@ -106,6 +141,11 @@ services:
       - MONGO_USER=dba
       - BACKUP_USER=bcp
       - MONGO_PASS=test1234
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongod --replSet rs1 --port 27017 --storageEngine wiredTiger --shardsvr  --keyFile /opt/keyFile --wiredTigerCacheSizeGB 1
     volumes:
       - ./scripts/start.sh:/opt/start.sh
@@ -113,12 +153,22 @@ services:
   rs102:
     image: percona/percona-server-mongodb:${MONGODB_VERSION:-3.6}
     hostname: rs102
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongod --replSet rs1 --port 27017 --storageEngine wiredTiger --shardsvr  --keyFile /opt/keyFile --wiredTigerCacheSizeGB 1
     volumes:
       - ./keyFile:/opt/keyFile
   rs103:
     image: percona/percona-server-mongodb:${MONGODB_VERSION:-3.6}
     hostname: rs103
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongod --replSet rs1 --port 27017 --storageEngine wiredTiger --shardsvr  --keyFile /opt/keyFile --wiredTigerCacheSizeGB 1
     volumes:
       - ./keyFile:/opt/keyFile
@@ -137,6 +187,11 @@ services:
     volumes: 
       - ./conf:/etc/pbm
       - ./backups:/opt/backups
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-agent
     cap_add:
       - NET_ADMIN
@@ -154,6 +209,11 @@ services:
         - "com.percona.pbm.app=agent"
       dockerfile: ./e2e-tests/docker/pbm-agent/Dockerfile
       context: ../..
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-agent
     cap_add:
       - NET_ADMIN
@@ -173,6 +233,11 @@ services:
         - "com.percona.pbm.app=agent"
       dockerfile: ./e2e-tests/docker/pbm-agent/Dockerfile
       context: ../..
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-agent
     cap_add:
       - NET_ADMIN
@@ -189,6 +254,11 @@ services:
       - MONGO_USER=dba
       - BACKUP_USER=bcp
       - MONGO_PASS=test1234
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongod --replSet rs2 --port 27017 --storageEngine wiredTiger --shardsvr  --keyFile /opt/keyFile --wiredTigerCacheSizeGB 1
     volumes:
       - ./scripts/start.sh:/opt/start.sh
@@ -196,12 +266,22 @@ services:
   rs202:
     image: percona/percona-server-mongodb:${MONGODB_VERSION:-3.6}
     hostname: rs202
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongod --replSet rs2 --port 27017 --storageEngine wiredTiger --shardsvr  --keyFile /opt/keyFile --wiredTigerCacheSizeGB 1
     volumes:
       - ./keyFile:/opt/keyFile
   rs203:
     image: percona/percona-server-mongodb:${MONGODB_VERSION:-3.6}
     hostname: rs203
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongod --replSet rs2 --port 27017 --storageEngine wiredTiger --shardsvr  --keyFile /opt/keyFile --wiredTigerCacheSizeGB 1
     volumes:
       - ./keyFile:/opt/keyFile
@@ -217,6 +297,11 @@ services:
         - "com.percona.pbm.app=agent"
       dockerfile: ./e2e-tests/docker/pbm-agent/Dockerfile
       context: ../..
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-agent
     cap_add:
       - NET_ADMIN
@@ -236,6 +321,11 @@ services:
         - "com.percona.pbm.app=agent"
       dockerfile: ./e2e-tests/docker/pbm-agent/Dockerfile
       context: ../..
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-agent
     cap_add:
       - NET_ADMIN
@@ -255,6 +345,11 @@ services:
         - "com.percona.pbm.app=agent"
       dockerfile: ./e2e-tests/docker/pbm-agent/Dockerfile
       context: ../..
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: pbm-agent
     cap_add:
       - NET_ADMIN
@@ -266,6 +361,11 @@ services:
   mongos:
     image: percona/percona-server-mongodb:${MONGODB_VERSION:-3.6}
     hostname: mongos
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: mongos --port 27017 --bind_ip_all --keyFile /opt/keyFile --configdb cfg/cfg01:27017,cfg02:27017,cfg03:27017
     ports:
       - "27017:27017"
@@ -293,6 +393,11 @@ services:
     environment:
       - "MINIO_ACCESS_KEY=minio1234"
       - "MINIO_SECRET_KEY=minio1234"
+    sysctls:
+        net.ipv4.tcp_keepalive_intvl: '30'
+        net.ipv4.tcp_keepalive_probes: '1'
+        net.ipv4.tcp_keepalive_time: '30'
+    privileged: true
     command: server /backups
   createbucket:
     image: minio/mc
